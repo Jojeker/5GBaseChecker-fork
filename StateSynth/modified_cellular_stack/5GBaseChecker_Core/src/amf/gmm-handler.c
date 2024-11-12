@@ -51,7 +51,7 @@
 #define PORT 8080
 
 int regis_count;
-amf_ue_t *amf_uee;
+extern amf_ue_t *amf_uee;
 
 void send_message(char* message) {
     send(server_sock, message, strlen(message), 0); 
