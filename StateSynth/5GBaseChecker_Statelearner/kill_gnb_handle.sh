@@ -14,7 +14,8 @@ echo "Killing OAI gNB"
 pkill -9 -f nr-softmodem
 # ps -ef | grep srsenb | grep -v grep | awk '{print $2}' | xargs sudo kill -9
 
-/usr/local/lib/uhd/utils/b2xx_fx3_utils --reset-device
+# Path is different..
+#/usr/lib/uhd/utils/b2xx_fx3_utils --reset-device
 
 #for i in /sys/bus/pci/drivers/xhci_hcd/*:*; do
 #

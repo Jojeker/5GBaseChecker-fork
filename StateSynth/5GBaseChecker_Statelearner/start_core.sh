@@ -20,10 +20,10 @@ echo "Killing done!"
 sleep 1
 
 source_dir=`pwd`
-cd /home/kai/Desktop/5GBaseChecker/StateSynth/modified_cellular_stack/5GBaseChecker_Core
+cd ../modified_cellular_stack/5GBaseChecker_Core
 
 ./build/tests/app/5gc ./build/configs/sample.yaml &> /tmp/core_fuzzing.log &
 
-cd "$source_dir"
+cd ${source_dir}
 
 echo "Finished launching start_core.sh"
