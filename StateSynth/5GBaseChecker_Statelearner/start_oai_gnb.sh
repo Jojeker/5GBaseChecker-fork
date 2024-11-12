@@ -6,10 +6,10 @@ if [ "$EUID" -ne 0 ]
 	exit
 fi
 
-echo "Launching start_srs_gnb.sh"
+echo "Launching start_gnb.sh"
 
 echo "Killing any already running srsgnb process"
-pkill -9 -f srsenb
+pkill -9 -f nr-softmodem
 # ps -ef | grep srsenb | grep -v grep | awk '{print $2}' | xargs sudo kill -9
 
 echo "Kiliing the enodeb_statelearner server listening on port 60000"
@@ -18,18 +18,19 @@ echo "Kiliing the enodeb_statelearner server listening on port 60000"
 
 source_dir=`pwd`
 
-# Use relative paths and cd into the configs directory, which should be picked up...
-CONFIG_DIR=../modified_cellular_stack/conf/srs_gnb
-TARGET_DIR=../../5GBaseChecker_srs_gnb/build/srsenb/src
+cd ../modified_cellular_stack/5GBaseChecker_OAI_gnb/cmake_targets/ran_build/build
 
-rm /tmp/enb_fuzzing.log
+rm /tmp/OAIgNB_fuzzing.log
 
-cd ${CONFIG_DIR};
-${TARGET_DIR}/srsenb enb.conf &> /tmp/enb_fuzzing.log &
-sleep 1
+./nr-softmodem -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf -E --sa --usrp-tx-thread-config 1 --continuous-tx &> /tmp/OAIgNB_fuzzing.log &
+
+#sleep 1
+#
+#sleep 1
 
 cd "$source_dir"
 
 echo "srsenb is running in the background"
-echo "log is saved to /tmp/enb_fuzzing.log"
-echo "Finished lauching start_srs_gnb.sh"
+echo "log is saved to /tmp/OAIgNB_fuzzing.log"
+echo "Finished lauching start_gnb.sh"
+
