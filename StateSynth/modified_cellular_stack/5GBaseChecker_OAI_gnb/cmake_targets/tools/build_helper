@@ -100,9 +100,11 @@ get_distribution_release() {
     fi
 }
 
+# Patch to support 24.04
 check_supported_distribution() {
     local distribution=$(get_distribution_release)
     case "$distribution" in
+        "ubuntu24.04") return 0 ;;
         "ubuntu23.10") return 0 ;;
         "ubuntu22.04") return 0 ;;
         "ubuntu21.04") return 0 ;;

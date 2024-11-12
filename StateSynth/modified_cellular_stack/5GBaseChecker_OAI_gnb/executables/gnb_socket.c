@@ -10,7 +10,7 @@ bool rrc_sm_cmd_sent = 0;
 bool rrc_reconf_sent = 0;
 bool has_key = false;
 int RACH_Count = 0;
-int sec_type; 
+extern int sec_type; 
 
 bool check_int(uint8_t* kRRCint) {
     bool is_int=false;
