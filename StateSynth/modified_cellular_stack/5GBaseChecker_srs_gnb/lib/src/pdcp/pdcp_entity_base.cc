@@ -88,9 +88,8 @@ void pdcp_entity_base::integrity_generate(uint8_t* msg, uint32_t msg_len, uint32
 
 bool pdcp_entity_base::integrity_verify(uint8_t* msg, uint32_t msg_len, uint32_t count, uint8_t* mac)
 {
-  mac_valid = true;
+  bool mac_valid = true;
   uint8_t  mac_exp[4] = {};
-  bool     is_valid   = true;
   uint8_t* k_int;
 
   // If control plane use RRC integrity key. If data use user plane key
@@ -119,23 +118,22 @@ bool pdcp_entity_base::integrity_verify(uint8_t* msg, uint32_t msg_len, uint32_t
   if (sec_cfg.integ_algo != INTEGRITY_ALGORITHM_ID_EIA0) {
     for (uint8_t i = 0; i < 4; i++) {
       if (mac[i] != mac_exp[i]) {
-//        is_valid = false;
         mac_valid = false;
         break;
       }
     }
-    srslog::log_channel& channel = is_valid ? logger.debug : logger.warning;
+    srslog::log_channel& channel = mac_valid ? logger.debug : logger.warning;
     channel("Integrity check input - COUNT %" PRIu32 ", Bearer ID %d, Direction %s",
             count,
             cfg.bearer_id,
             cfg.rx_direction == SECURITY_DIRECTION_DOWNLINK ? "Downlink" : "Uplink");
     channel(k_int, 32, "Integrity check key:");
-    channel(mac_exp, 4, "MAC %s (expected):", is_valid ? "match" : "mismatch");
-    channel(mac, 4, "MAC %s (found):", is_valid ? "match" : "mismatch");
+    channel(mac_exp, 4, "MAC %s (expected):", mac_valid ? "match" : "mismatch");
+    channel(mac, 4, "MAC %s (found):", mac_valid ? "match" : "mismatch");
     channel(msg, msg_len, "Integrity check input msg (Bytes=%" PRIu32 "):", msg_len);
   }
 
-  return is_valid;
+  return mac_valid;
 }
 
 void pdcp_entity_base::cipher_encrypt(uint8_t* msg, uint32_t msg_len, uint32_t count, uint8_t* ct)
