@@ -1,0 +1,15 @@
+# Ignore build artifacts and logs
+*.o
+*.a
+*.so
+*.idx
+**/build
+**/CMakeFiles/*
+**/__pycache__/*
+**/.venv
+*.log
+**/cbmc
+**/cmake_targets/log
+**/aux_files/*
+**/fgue.properties
+my_database.sqlite
