@@ -1,1 +1,1 @@
-start_srs_gnb.sh
+start_oai_gnb.sh
