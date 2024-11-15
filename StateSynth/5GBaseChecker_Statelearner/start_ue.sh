@@ -23,7 +23,7 @@ pkill -9 -f srsue
 
 SRSUE_SRC="../modified_cellular_stack/5GBaseChecker_srs_gnb/build/srsue/src/"
 #SRSUE_SRC="/home/wtw/Desktop/clean/srs2210/srsRAN_4G/build/srsue/src"
-CONFIGS=../modified_cellular_stack/conf/srs_ue
+CONFIGS=../modified_cellular_stack/conf/srs_ue/provided
 #CONFIGS="../modified_cellular_stack/5GBaseChecker_srs_gnb/build/srsue/src"
 
 "${SRSUE_SRC}"/srsue "${CONFIGS}"/ue.conf > /tmp/ue_fuzzing.log &

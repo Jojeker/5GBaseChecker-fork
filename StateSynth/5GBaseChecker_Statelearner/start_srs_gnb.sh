@@ -19,8 +19,8 @@ echo "Kiliing the enodeb_statelearner server listening on port 60000"
 source_dir=`pwd`
 
 # Use relative paths and cd into the configs directory, which should be picked up...
-CONFIG_DIR=../modified_cellular_stack/conf/srs_gnb
-TARGET_DIR=../../5GBaseChecker_srs_gnb/build/srsenb/src
+CONFIG_DIR=../modified_cellular_stack/conf/srs_gnb/provided
+TARGET_DIR=../../../5GBaseChecker_srs_gnb/build/srsenb/src
 
 rm /tmp/enb_fuzzing.log
 
