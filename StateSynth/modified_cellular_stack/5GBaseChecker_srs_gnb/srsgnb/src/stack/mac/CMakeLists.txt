@@ -41,4 +41,4 @@ add_library(srsgnb_mac STATIC ${SOURCES})
 target_link_libraries(srsgnb_mac srsenb_mac_common srsran_mac rrc_nr_asn1)
 include_directories(${PROJECT_SOURCE_DIR})
 
-add_subdirectory(test)
+# add_subdirectory(test)

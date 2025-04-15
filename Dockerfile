@@ -87,12 +87,18 @@ ENV PATH="/mongodb/bin:${PATH}"
 WORKDIR /SRS
 COPY StateSynth/modified_cellular_stack/5GBaseChecker_srs_gnb .
 RUN rm -rf build \
-    && mkdir build \
-    && cd build \
-    && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++-18 -DCMAKE_C_COMPILER=clang-18 .. \
+    && mkdir build-ue \
+    && cd build-ue \
+    && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++-18 -DCMAKE_C_COMPILER=clang-18 -DENABLE_SRSUE=ON -DENABLE_ASAN=ON .. \
     && make -j $(nproc) \
     && cp ./srsue/src/srsue /usr/local/bin/srsue \
+    && cd .. \
+    && mkdir build-gnb \
+    && cd build-gnb \
+    && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++-18 -DCMAKE_C_COMPILER=clang-18 -DENABLE_SRSENB=ON -DENABLE_SRSUE=OFF -DENABLE_ASAN=OFF .. \
+    && make -j $(nproc) \
     && cp ./srsenb/src/srsenb /usr/local/bin/srsenb
+
 
 # Build open5gs
 WORKDIR /OPEN5GS

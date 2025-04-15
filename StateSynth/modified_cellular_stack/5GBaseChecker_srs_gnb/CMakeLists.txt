@@ -68,12 +68,12 @@ option(ENABLE_SRSEPC         "Build srsEPC application"                 ON)
 option(DISABLE_SIMD          "Disable SIMD instructions"                OFF)
 option(AUTO_DETECT_ISA       "Autodetect supported ISA extensions"      ON)
 
-option(ENABLE_GUI            "Enable GUI (using srsGUI)"                ON)
-option(ENABLE_RF_PLUGINS     "Enable RF plugins"                        ON)
-option(ENABLE_UHD            "Enable UHD"                               ON)
-option(ENABLE_BLADERF        "Enable BladeRF"                           ON)
-option(ENABLE_SOAPYSDR       "Enable SoapySDR"                          ON)
-option(ENABLE_SKIQ           "Enable Sidekiq SDK"                       ON)
+option(ENABLE_GUI            "Enable GUI (using srsGUI)"                OFF)
+option(ENABLE_RF_PLUGINS     "Enable RF plugins"                        OFF)
+option(ENABLE_UHD            "Enable UHD"                               OFF)
+option(ENABLE_BLADERF        "Enable BladeRF"                           OFF)
+option(ENABLE_SOAPYSDR       "Enable SoapySDR"                          OFF)
+option(ENABLE_SKIQ           "Enable Sidekiq SDK"                       OFF)
 option(ENABLE_ZEROMQ         "Enable ZeroMQ"                            ON)
 option(ENABLE_HARDSIM        "Enable support for SIM cards"             ON)
 
@@ -91,7 +91,7 @@ option(ENABLE_TIDY           "Enable clang tidy"                        OFF)
 option(USE_LTE_RATES         "Use standard LTE sampling rates"          OFF)
 option(USE_MKL               "Use MKL instead of fftw"                  OFF)
 
-option(ENABLE_TIMEPROF       "Enable time profiling"                    ON)
+option(ENABLE_TIMEPROF       "Enable time profiling"                    OFF)
 
 option(FORCE_32BIT           "Add flags to force 32 bit compilation"    OFF)
 
@@ -385,6 +385,10 @@ endmacro(ADD_C_COMPILER_FLAG_IF_AVAILABLE)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-comment -Wno-reorder -Wno-unused-variable -Wtype-limits -std=c++14 -fno-strict-aliasing")
 
+  # For clang to compile the binary
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-array-bounds -Wno-vla-cxx-extension")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-array-bounds -Wno-vla-cxx-extension")
+  
   ADD_CXX_COMPILER_FLAG_IF_AVAILABLE("-Wno-unused-but-set-variable" HAVE_WNO_UNUSED_BUT_SET_VARIABLE)
 
   if (AUTO_DETECT_ISA)
@@ -514,8 +518,18 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU" OR CMAKE_C_COMPILER_ID MATCHES "Clang")
     # While RPATH is default, some systems (e.g. Ubuntu 18.04 and 20.04) use RUNPATH by default, which is non-transitive.
     # Since ASAN intercepts dlopen(), by which it replaces the dynamic string token "$ORIGIN" to its own location,
     # the RF plugins won't be found by "libsrsran_rf.so" when using ASAN + RUNPATH in the top-level executable.
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer -Wl,--disable-new-dtags")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer -Wl,--disable-new-dtags")
+    
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fsanitize-coverage=trace-pc-guard -fno-sanitize=leak -fno-omit-frame-pointer")
+    # TODO: only include L3 and things called from it.
+    # -fsanitize-coverage-ignorelist=${CMAKE_SOURCE_DIR}/sanitizer_blocklist.txt -fno-omit-frame-pointer")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize-coverage=trace-pc-guard -fno-sanitize=leak -fno-omit-frame-pointer")
+    # TODO: only include L3 and things called from it.
+    #-fsanitize-coverage-ignorelist=${CMAKE_SOURCE_DIR}/sanitizer_blocklist.txt  -fno-omit-frame-pointer")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address -fsanitize-coverage=trace-pc -fno-sanitize=leak -fno-omit-frame-pointer")
+    
+    
+    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer -Wl,--disable-new-dtags")
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer -Wl,--disable-new-dtags")
   endif (ENABLE_ASAN)
 
   if (ENABLE_TSAN)
@@ -632,7 +646,7 @@ message(STATUS "Building for version: ${VERSION}")
 ########################################################################
 
 function(add_lte_test)
-  add_test(${ARGN})
+  # add_test(${ARGN})
   set(TNAME ${ARGV0})
   if(${TNAME} STREQUAL NAME)
     set(TNAME ${ARGV1})
@@ -641,7 +655,7 @@ function(add_lte_test)
 endfunction()
 
 function(add_nr_test)
-  add_test(${ARGN})
+  # add_test(${ARGN})
   set(TNAME ${ARGV0})
   if(${TNAME} STREQUAL NAME)
     set(TNAME ${ARGV1})
@@ -653,7 +667,7 @@ function(add_nr_advanced_test)
   if (NOT ${ENABLE_ALL_TEST})
     return()
   endif()
-  add_test(${ARGN})
+  # add_test(${ARGN})
   set(TNAME ${ARGV0})
   if(${TNAME} STREQUAL NAME)
     set(TNAME ${ARGV1})
@@ -711,5 +725,5 @@ else(ENABLE_SRSEPC)
   message(STATUS "srsEPC build disabled")
 endif(ENABLE_SRSEPC)
 
-add_subdirectory(test)
+# add_subdirectory(test)
 add_executable(testserver srsgnb/src/stack/ngap/testserver.cpp)

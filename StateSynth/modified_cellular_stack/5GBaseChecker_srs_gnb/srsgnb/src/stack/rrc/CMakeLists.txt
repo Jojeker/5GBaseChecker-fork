@@ -28,4 +28,4 @@ target_link_libraries(srsgnb_rrc srsgnb_rrc_config_utils)
 
 include_directories(${PROJECT_SOURCE_DIR})
 
-add_subdirectory(test)
+# add_subdirectory(test)

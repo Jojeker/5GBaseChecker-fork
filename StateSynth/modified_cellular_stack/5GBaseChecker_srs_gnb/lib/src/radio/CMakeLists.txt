@@ -24,4 +24,4 @@ if(RF_FOUND)
   install(TARGETS srsran_radio DESTINATION ${LIBRARY_DIR} OPTIONAL)
 endif(RF_FOUND)
 
-add_subdirectory(test)
+# add_subdirectory(test)

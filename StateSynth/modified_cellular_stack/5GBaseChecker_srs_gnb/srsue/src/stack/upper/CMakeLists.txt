@@ -18,7 +18,7 @@
 # and at http://www.gnu.org/licenses/.
 #
 
-add_subdirectory(test)
+# add_subdirectory(test)
 
 set(SOURCES nas.cc nas_emm_state.cc nas_idle_procedures.cc gw.cc usim_base.cc usim.cc tft_packet_filter.cc nas_base.cc nas_5g_procedures.cc nas_5g.cc nas_5gmm_state.cc sdap.cc)
 

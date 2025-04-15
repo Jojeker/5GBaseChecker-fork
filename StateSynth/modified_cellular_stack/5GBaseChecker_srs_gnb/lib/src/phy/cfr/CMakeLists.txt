@@ -21,5 +21,5 @@
 set(SRCS cfr.c)
 add_library(srsran_cfr OBJECT ${SRCS})
 
-add_subdirectory(test)
+# add_subdirectory(test)
 

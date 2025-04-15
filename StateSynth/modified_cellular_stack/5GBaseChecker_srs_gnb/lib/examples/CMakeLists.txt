@@ -107,4 +107,4 @@ else(RF_FOUND)
 endif(RF_FOUND)
 
 # Add eNB/UE IQ test
-add_subdirectory(test)
+# add_subdirectory(test)

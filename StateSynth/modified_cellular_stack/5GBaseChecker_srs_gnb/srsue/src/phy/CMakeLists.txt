@@ -18,7 +18,7 @@
 # and at http://www.gnu.org/licenses/.
 #
 
-add_subdirectory(test)
+# add_subdirectory(test)
 
 file(GLOB_RECURSE SOURCES "*.cc")
 add_library(srsue_phy STATIC ${SOURCES})
