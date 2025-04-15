@@ -9,7 +9,8 @@ fi
 echo "Launching start_ue.sh"
 
 echo "Killing any already running srsue process"
-pkill -9 -f srsue
+# Do not kill otherwise we miss the coverage
+pkill srsue
 # ps -ef | grep srsue | grep -v grep | awk '{print $2}' | xargs sudo kill -9
 
 #sudo kill $(lsof -t -i:60001)
@@ -21,13 +22,13 @@ pkill -9 -f srsue
 
 #rm /tmp/ue_fuzzing.log
 
-SRSUE_SRC="../modified_cellular_stack/5GBaseChecker_srs_gnb/build/srsue/src/"
+#SRSUE_SRC="../modified_cellular_stack/5GBaseChecker_srs_gnb/build/srsue/src/"
 #SRSUE_SRC="/home/wtw/Desktop/clean/srs2210/srsRAN_4G/build/srsue/src"
-CONFIGS=../modified_cellular_stack/conf/srs_ue/provided
+#CONFIGS=../modified_cellular_stack/conf/srs_ue/provided
 #CONFIGS="../modified_cellular_stack/5GBaseChecker_srs_gnb/build/srsue/src"
 
-"${SRSUE_SRC}"/srsue "${CONFIGS}"/ue.conf > /tmp/ue_fuzzing.log &
-
+echo "Running in Docker environment"
+env ASAN_OPTIONS=coverage=1:coverage_dir=/data/coverage srsue /conf/srs_ue/provided/ue.conf > /tmp/ue_fuzzing.log &
 sleep 1
 
 #cd "$source_dir"

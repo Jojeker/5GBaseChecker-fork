@@ -17,14 +17,14 @@ pkill -9 -f nr-softmodem
 
 source_dir=$(pwd)
 
-cd ../modified_cellular_stack/5GBaseChecker_OAI_gnb/cmake_targets/ran_build/build
+# cd ../modified_cellular_stack/5GBaseChecker_OAI_gnb/cmake_targets/ran_build/build
 
 rm /tmp/OAIgNB_fuzzing.log
 
-# ./nr-softmodem -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf -E --sa --usrp-tx-thread-config 1 --continuous-tx &> /tmp/OAIgNB_fuzzing.log &
-./nr-softmodem -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf -E --sa --usrp-tx-thread-config 1 --continuous-tx --rfsim --gNBs.[0].min_rxtxtime 6 2&1> /tmp/OAIgNB_fuzzing.log &
+echo "Running in Docker environment"
+nr-softmodem -O /conf/OAI_gnb/gnb.sa.band78.fr1.106PRB.usrpb210.conf -E --sa --usrp-tx-thread-config 1 --continuous-tx --rfsim --gNBs.[0].min_rxtxtime 6 2&1> /tmp/OAIgNB_fuzzing.log &
 
-cd "$source_dir"
+# cd "$source_dir"
 
 echo "srsenb is running in the background"
 echo "log is saved to /tmp/OAIgNB_fuzzing.log"

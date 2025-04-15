@@ -7,6 +7,6 @@ fi
 
 echo -n "Killing srsUE... "
 
-pkill -9 -f srsue
+pkill srsue
 
 echo "[OK]"

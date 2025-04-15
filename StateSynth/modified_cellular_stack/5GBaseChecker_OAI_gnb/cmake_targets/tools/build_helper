@@ -611,7 +611,6 @@ check_install_oai_software() {
         ninja-build \
 	pkg-config \
 	git \
-	libatlas-base-dev \
 	libblas-dev \
 	liblapack-dev \
 	liblapacke-dev \

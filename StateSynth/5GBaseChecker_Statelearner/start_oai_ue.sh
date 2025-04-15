@@ -17,7 +17,10 @@ cd ../modified_cellular_stack/5GBaseChecker_OAI_gnb/cmake_targets/ran_build/buil
 
 rm /tmp/OAIue_fuzzing.log
 
-./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --sa --ue-fo-compensation -E -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/ue.conf --dlsch-parallel 8 --rfsim
+echo "Running in Docker environment"
+nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --sa --ue-fo-compensation -E -O /conf/oai_ue.conf --dlsch-parallel 8 --rfsim &> /tmp/OAIue_fuzzing.log &
+
+# ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --sa --ue-fo-compensation -E -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/ue.conf --dlsch-parallel 8 --rfsim
 
 sleep 1
 

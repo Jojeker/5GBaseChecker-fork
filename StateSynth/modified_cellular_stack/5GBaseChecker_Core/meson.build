@@ -85,6 +85,7 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
 
         '-Wno-sign-compare',
         '-Wno-unused-parameter',
+        '-Wno-compound-token-split-by-macro',
 
         '-ffast-math',
         '-fdiagnostics-show-option',
