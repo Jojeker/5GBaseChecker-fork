@@ -26,6 +26,10 @@
 #include <cstdio>
 #include <unistd.h>
 
+#ifdef ENABLE_ASAN
+#include <sanitizer/coverage_interface.h>
+#endif
+
 #ifndef SRSRAN_TERM_TIMEOUT_S
 #define SRSRAN_TERM_TIMEOUT_S (5)
 #endif
@@ -43,6 +47,11 @@ static void srsran_signal_handler(int signal)
     default:
       // all other registered signals try to stop the app gracefully
       // Call the user handler if present and remove it so that further signals are treated by the default handler.
+#ifdef ENABLE_ASAN
+#pragma  message("ASAN enabled, dumping coverage")
+      __sanitizer_cov_dump();
+      raise(SIGKILL);
+#endif
       if (auto handler = user_handler.exchange(nullptr)) {
         handler();
       } else {

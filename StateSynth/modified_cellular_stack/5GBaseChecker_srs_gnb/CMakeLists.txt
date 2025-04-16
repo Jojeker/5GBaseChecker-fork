@@ -518,6 +518,9 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU" OR CMAKE_C_COMPILER_ID MATCHES "Clang")
     # While RPATH is default, some systems (e.g. Ubuntu 18.04 and 20.04) use RUNPATH by default, which is non-transitive.
     # Since ASAN intercepts dlopen(), by which it replaces the dynamic string token "$ORIGIN" to its own location,
     # the RF plugins won't be found by "libsrsran_rf.so" when using ASAN + RUNPATH in the top-level executable.
+     
+    # Make the asan stuff be compiled only in for this reason
+    add_definitions(-DENABLE_ASAN) 
     
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fsanitize-coverage=trace-pc-guard -fno-sanitize=leak -fno-omit-frame-pointer")
     # TODO: only include L3 and things called from it.
