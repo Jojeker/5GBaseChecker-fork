@@ -1,0 +1,16 @@
+services:
+  fgbasechecker-eval:
+    image: test-5gbasechecker:latest
+    cpuset: ${CORES:-0,1}
+    privileged: true
+    devices:
+      - /dev/cpu_dma_latency
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - ${COVERAGE_OUT}:/data/coverage/
+      - /sys:/sys
+    tty: true
+    stdin_open: true
+#    entrypoint: /app/do_SRS.sh
