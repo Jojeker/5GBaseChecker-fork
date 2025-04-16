@@ -13,4 +13,20 @@ ln -s start_srs_ue.sh start_ue.sh
 rm start_gnb.sh
 ln -s start_srs_gnb.sh start_gnb.sh
 
-./start_learner.sh srsue
+# Start the script in the background and save its PID
+./start_learner.sh srsue &
+LEARNER_PID=$!
+
+# Set a 24-hour timer (24h * 60m * 60s = 86400 seconds)
+(
+    sleep 86400
+    echo "24 hours passed, stopping all processes"
+    kill -9 $LEARNER_PID
+    pkill -9 java # For good measure
+    pkill -9 mongo
+    # Add any other cleanup processes needed
+    exit 0
+) &
+
+# Wait for the learner process
+wait $LEARNER_PID

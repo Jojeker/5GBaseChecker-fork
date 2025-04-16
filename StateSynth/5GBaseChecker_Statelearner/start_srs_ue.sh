@@ -9,7 +9,9 @@ fi
 echo "Launching start_ue.sh"
 
 echo "Killing any already running srsue process"
-# Do not kill otherwise we miss the coverage
+# Do not kill with SIGKILL, otherwise we miss the coverage
+# the srsue writes coverage and then raises SIGKILL, so we have a small 
+# extra delay, which should be negligible considering the overall execution time
 pkill srsue
 # ps -ef | grep srsue | grep -v grep | awk '{print $2}' | xargs sudo kill -9
 
@@ -27,7 +29,6 @@ pkill srsue
 #CONFIGS=../modified_cellular_stack/conf/srs_ue/provided
 #CONFIGS="../modified_cellular_stack/5GBaseChecker_srs_gnb/build/srsue/src"
 
-echo "Running in Docker environment"
 env ASAN_OPTIONS=coverage=1:coverage_dir=/data/coverage srsue /conf/srs_ue/provided/ue.conf > /tmp/ue_fuzzing.log &
 sleep 1
 

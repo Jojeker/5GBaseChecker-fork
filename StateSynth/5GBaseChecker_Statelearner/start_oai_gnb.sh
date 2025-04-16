@@ -10,8 +10,9 @@ echo "Launching start_oai_gnb.sh"
 
 echo "Killing any already running OAI nr-softmodem process"
 pkill -9 -f nr-softmodem
+# ps -ef | grep srsenb | grep -v grep | awk '{print $2}' | xargs sudo kill -9
 
-#echo "Kiliing the enodeb_statelearner server listening on port 60000"
+echo "Kiliing the enodeb_statelearner server listening on port 60000"
 #sudo kill $(lsof -t -i:60001)
 #kill -9 $(lsof -t -i:60001)
 
@@ -21,8 +22,11 @@ source_dir=$(pwd)
 
 rm /tmp/OAIgNB_fuzzing.log
 
-echo "Running in Docker environment"
 nr-softmodem -O /conf/OAI_gnb/gnb.sa.band78.fr1.106PRB.usrpb210.conf -E --sa --usrp-tx-thread-config 1 --continuous-tx --rfsim --gNBs.[0].min_rxtxtime 6 2&1> /tmp/OAIgNB_fuzzing.log &
+
+#sleep 1
+#
+#sleep 1
 
 # cd "$source_dir"
 

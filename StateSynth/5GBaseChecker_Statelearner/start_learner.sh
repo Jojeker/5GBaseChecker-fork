@@ -6,5 +6,7 @@ if [ -z "$DRIVER" ]; then
   exit 1
 fi
 
+# Copy over the right config for the eval
 ./load_learner_config.sh ./learner_config/Sequential_learning/$DRIVER.properties fgue.properties
+
 java -cp out/artifacts/5GBaseChecker_Statelearner_jar/5GBaseChecker_Statelearner.jar org.example.uelearner.Learner fgue.properties
