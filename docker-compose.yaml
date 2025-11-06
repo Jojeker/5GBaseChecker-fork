@@ -1,6 +1,6 @@
 services:
-  fgbasechecker-eval:
-    image: test-5gbasechecker:latest
+  fgbc-eval:
+    image: 5gbc:latest
     cpuset: ${CORES:-0,1}
     privileged: true
     devices:

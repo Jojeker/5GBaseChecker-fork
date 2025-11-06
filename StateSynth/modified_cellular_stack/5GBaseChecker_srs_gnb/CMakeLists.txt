@@ -522,14 +522,9 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU" OR CMAKE_C_COMPILER_ID MATCHES "Clang")
     # Make the asan stuff be compiled only in for this reason
     add_definitions(-DENABLE_ASAN) 
     
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fsanitize-coverage=trace-pc-guard -fno-sanitize=leak -fno-omit-frame-pointer")
-    # TODO: only include L3 and things called from it.
-    # -fsanitize-coverage-ignorelist=${CMAKE_SOURCE_DIR}/sanitizer_blocklist.txt -fno-omit-frame-pointer")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize-coverage=trace-pc-guard -fno-sanitize=leak -fno-omit-frame-pointer")
-    # TODO: only include L3 and things called from it.
-    #-fsanitize-coverage-ignorelist=${CMAKE_SOURCE_DIR}/sanitizer_blocklist.txt  -fno-omit-frame-pointer")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address -fsanitize-coverage=trace-pc -fno-sanitize=leak -fno-omit-frame-pointer")
-    
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize-coverage-allowlist=/SRS/allowlist.txt -fsanitize=address -fsanitize-coverage=trace-pc-guard -fno-sanitize=leak -fno-omit-frame-pointer")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize-coverage-allowlist=/SRS/allowlist.txt -fsanitize=address -fsanitize-coverage=trace-pc-guard -fno-sanitize=leak -fno-omit-frame-pointer")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize-coverage-allowlist=/SRS/allowlist.txt -fsanitize=address -fsanitize-coverage=trace-pc -fno-sanitize=leak -fno-omit-frame-pointer")
     
     #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer -Wl,--disable-new-dtags")
     #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer -Wl,--disable-new-dtags")

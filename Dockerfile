@@ -83,8 +83,12 @@ ENV CC=/usr/bin/clang-18
 ENV CXX=/usr/bin/clang++-18
 ENV PATH="/mongodb/bin:${PATH}"
 
+# Should also work since we patched it into the CMakeLists.txt
+ENV LLVM_ALLOWLIST=/SRS/allowlist.txt
+
 # Build srsRAN
 WORKDIR /SRS
+COPY allowlist.txt .
 COPY StateSynth/modified_cellular_stack/5GBaseChecker_srs_gnb .
 RUN rm -rf build \
     && mkdir build-ue \
@@ -110,7 +114,9 @@ RUN CFLAGS="-Wno-compound-token-split-by-macro -Wno-incompatible-pointer-types-d
 # Build the learner
 WORKDIR /app
 COPY ./StateSynth/5GBaseChecker_Statelearner .
-RUN mvn install -DskipTests
+# The maven project does not build, so we use the pushed jar file...
+# RUN mvn -q -DskipTests dependency:tree
+
 
 # Build OAI
 # WORKDIR /OAI

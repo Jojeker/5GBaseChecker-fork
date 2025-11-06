@@ -2,8 +2,8 @@ CURRENT_DATE := $(shell date +%Y-%m-%d_%H-%M)
 BASE_DIR := $(shell realpath COV_OUT)/$(CURRENT_DATE)
 DURATION := 24
 CPUSTART := 5
-NRUNS := 5
-IMAGE := fgbasechecker-eval
+NRUNS := 1
+IMAGE := fgbc-eval
 
 # Script runs for 24 hours (hardcoded)
 eval-srs:
@@ -18,3 +18,6 @@ eval-srs:
 		--rm \
 		$(IMAGE) sh -c "/app/do_SRS.sh > /data/coverage/log.txt 2>&1"; \
 	done
+
+build:
+	- docker build -t $(IMAGE) .
