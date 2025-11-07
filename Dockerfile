@@ -83,6 +83,29 @@ ENV CC=/usr/bin/clang-18
 ENV CXX=/usr/bin/clang++-18
 ENV PATH="/mongodb/bin:${PATH}"
 
+# [Fuzzer] Build AFL++
+WORKDIR /opt
+RUN git clone https://github.com/AFLplusplus/AFLplusplus.git
+
+ENV AFLPP_VERSION=f590973387ee04d6c7ef016d5111313f9f4945b8
+
+WORKDIR /opt/AFLplusplus
+RUN git checkout ${AFLPP_VERSION} && \
+    make distrib && \
+    make install
+
+ENV PATH="/opt/AFLplusplus:/opt/AFLplusplus/utils:${PATH}"
+ENV AFL_PATH="/opt/AFLplusplus"
+
+# Build open5gs
+WORKDIR /OPEN5GS
+COPY StateSynth/modified_cellular_stack/5GBaseChecker_Core .
+RUN CFLAGS="-Wno-compound-token-split-by-macro -Wno-incompatible-pointer-types-discards-qualifiers -Wno-int-conversion -Wno-missing-prototypes" \
+    meson build --prefix=`pwd`/install && ninja -C build \
+    && ln -s /OPEN5GS/build/tests/app/5gc /usr/local/bin/5gc
+
+RUN apt update && apt install -y lld
+
 # Should also work since we patched it into the CMakeLists.txt
 ENV LLVM_ALLOWLIST=/SRS/allowlist.txt
 
@@ -93,23 +116,28 @@ COPY StateSynth/modified_cellular_stack/5GBaseChecker_srs_gnb .
 RUN rm -rf build \
     && mkdir build-ue \
     && cd build-ue \
-    && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++-18 -DCMAKE_C_COMPILER=clang-18 -DENABLE_SRSUE=ON -DENABLE_ASAN=ON .. \
-    && make -j $(nproc) \
+    && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo  \
+    -DCMAKE_C_COMPILER="afl-clang-fast" \
+    -DCMAKE_CXX_COMPILER="afl-clang-fast++"  \
+    -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld" \
+    -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld" \
+    -DENABLE_DUMP=ON \
+    && AFL_LLVM_ALLOWLIST=/SRS/allowlist.txt make -j $(nproc) srsue \
     && cp ./srsue/src/srsue /usr/local/bin/srsue \
     && cd .. \
     && mkdir build-gnb \
     && cd build-gnb \
-    && cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++-18 -DCMAKE_C_COMPILER=clang-18 -DENABLE_SRSENB=ON -DENABLE_SRSUE=OFF -DENABLE_ASAN=OFF .. \
+    && cmake -DCMAKE_BUILD_TYPE=Debug \
+        -DCMAKE_CXX_COMPILER=clang++-18 \
+        -DCMAKE_C_COMPILER=clang-18 \
+        -DENABLE_SRSENB=ON \
+        -DENABLE_SRSUE=OFF \
+        -DENABLE_ASAN=OFF .. \
     && make -j $(nproc) \
-    && cp ./srsenb/src/srsenb /usr/local/bin/srsenb
+    && cp ./srsenb/src/srsenb /usr/local/bin/srsenb \
+    && ldconfig
 
 
-# Build open5gs
-WORKDIR /OPEN5GS
-COPY StateSynth/modified_cellular_stack/5GBaseChecker_Core .
-RUN CFLAGS="-Wno-compound-token-split-by-macro -Wno-incompatible-pointer-types-discards-qualifiers -Wno-int-conversion -Wno-missing-prototypes" \
-    meson build --prefix=`pwd`/install && ninja -C build \
-    && ln -s /OPEN5GS/build/tests/app/5gc /usr/local/bin/5gc
 
 # Build the learner
 WORKDIR /app

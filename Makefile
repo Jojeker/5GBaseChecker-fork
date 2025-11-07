@@ -21,3 +21,10 @@ eval-srs:
 
 build:
 	- docker build -t $(IMAGE) .
+
+dev-enter:
+	- docker run -it --rm \
+		-v "$$(pwd)/COV_OUT:/COV_OUT" \
+		--privileged \
+		$(IMAGE) \
+		bash

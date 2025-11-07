@@ -513,6 +513,10 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU" OR CMAKE_C_COMPILER_ID MATCHES "Clang")
     message(FATAL_ERROR "ASAN, MSAN and TSAN cannot be enabled at the same time.")
   endif ()
 
+  if (ENABLE_DUMP)
+      add_definitions(-DENABLE_DUMP) 
+  endif (ENABLE_DUMP)
+
   if (ENABLE_ASAN)
     # Note: When using ASAN, we need to ensure the use of RPATH instead of RUNPATH via "-Wl,--disable-new-dtags"
     # While RPATH is default, some systems (e.g. Ubuntu 18.04 and 20.04) use RUNPATH by default, which is non-transitive.
@@ -521,13 +525,9 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU" OR CMAKE_C_COMPILER_ID MATCHES "Clang")
      
     # Make the asan stuff be compiled only in for this reason
     add_definitions(-DENABLE_ASAN) 
-    
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize-coverage-allowlist=/SRS/allowlist.txt -fsanitize=address -fsanitize-coverage=trace-pc-guard -fno-sanitize=leak -fno-omit-frame-pointer")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize-coverage-allowlist=/SRS/allowlist.txt -fsanitize=address -fsanitize-coverage=trace-pc-guard -fno-sanitize=leak -fno-omit-frame-pointer")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize-coverage-allowlist=/SRS/allowlist.txt -fsanitize=address -fsanitize-coverage=trace-pc -fno-sanitize=leak -fno-omit-frame-pointer")
-    
-    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer -Wl,--disable-new-dtags")
-    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer -Wl,--disable-new-dtags")
+	
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer -Wl,--disable-new-dtags")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer -Wl,--disable-new-dtags")
   endif (ENABLE_ASAN)
 
   if (ENABLE_TSAN)

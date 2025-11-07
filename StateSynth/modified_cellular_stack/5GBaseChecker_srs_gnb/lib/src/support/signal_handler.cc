@@ -25,9 +25,25 @@
 #include <csignal>
 #include <cstdio>
 #include <unistd.h>
+#include <fcntl.h>
+#include <time.h>
 
-#ifdef ENABLE_ASAN
-#include <sanitizer/coverage_interface.h>
+
+#ifdef ENABLE_DUMP
+extern "C" void __afl_manual_init(void);
+
+__attribute__((constructor))
+static void init_afl() {
+  __afl_manual_init();   // sets up the bitmap even without afl-fuzz/showmap
+}
+
+
+// Get AFL stuff and dump it manually
+extern "C" {
+  __attribute__((weak)) unsigned char *__afl_area_ptr;
+  __attribute__((weak)) unsigned int  __afl_map_size;
+}
+
 #endif
 
 #ifndef SRSRAN_TERM_TIMEOUT_S
@@ -47,10 +63,17 @@ static void srsran_signal_handler(int signal)
     default:
       // all other registered signals try to stop the app gracefully
       // Call the user handler if present and remove it so that further signals are treated by the default handler.
-#ifdef ENABLE_ASAN
+#ifdef ENABLE_DUMP
 #pragma  message("ASAN enabled, dumping coverage")
-      __sanitizer_cov_dump();
-      raise(SIGKILL);
+
+        pid_t p = getpid();
+	time_t ts = time(NULL);
+        char buf[256];
+	snprintf(buf, sizeof(buf), "/data/coverage/afl_cov_%ld_%d.bin", (long)ts, (int)p);
+        int fd = open(buf, O_WRONLY|O_CREAT|O_TRUNC, 0600);
+	if (fd >= 0) { write(fd, __afl_area_ptr, __afl_map_size); close(fd); }
+
+	raise(SIGKILL);
 #endif
       if (auto handler = user_handler.exchange(nullptr)) {
         handler();

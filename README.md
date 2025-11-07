@@ -1,3 +1,59 @@
+# EVAL INSTRUMENTATION
+
+- We built the implementation with AFL instrumentation to match our evaluation setup
+- When the application terminates, similar to sancov instrumentation, it writes the coverage map to a file.
+- Since the coverage map contains non-zero entries at edges that were hit, we can simply count them with a simple python script
+
+```python
+# 1. Execute the program (test)
+/SRS/build-ue/srsue/src/srsue /conf/srs_ue/provided/ue.conf
+
+# 2. We get the following file:
+# afl_cov_{PID}.bin
+# containing the coverage map
+
+# 3. Compute the covered edges (non-zero)
+python3 - <<'PY'
+import sys
+data=open("afl_cov_15.bin","rb").read()
+print(sum(1 for b in data if b))
+PY
+# >> 1672 
+# >> (We exited with Ctrl-c)
+```
+
+- To verify consistency, we double checked the result of the counting with the following command:
+
+```bash
+root@2495357a7f69:/app# AFL_MAP_SIZE=152618 AFL_NO_FORKSRV=1 afl-showmap -t 5000 -e -s -o m.bin -- /SRS/build-ue/srsue/src/srsue /conf/srs_ue/provided/ue.conf
+afl-showmap++4.32a by Michal Zalewski
+[*] Executing '/SRS/build-ue/srsue/src/srsue'...
+[!] WARNING: Old fork server model is used by the target, this still works though.
+-- Program output begins --
+Reading configuration file /conf/srs_ue/provided/ue.conf...
+
+Built in RelWithDebInfo mode using 22.04.1.
+
+Opening 1 channels in RF device=zmq with args=tx_port=tcp://*:2001,rx_port=tcp://localhost:2000,id=ue,base_srate=11.52e6
+Supported RF device list: zmq file
+CHx base_srate=11.52e6
+CHx id=ue
+Current sample rate is 1.92 MHz with a base rate of 11.52 MHz (x6 decimation)
+CH0 rx_port=tcp://localhost:2000
+CH0 tx_port=tcp://*:2001
+Current sample rate is 11.52 MHz with a base rate of 11.52 MHz (x1 decimation)
+Current sample rate is 11.52 MHz with a base rate of 11.52 MHz (x1 decimation)
+Waiting PHY to initialize ... done!
+Attaching UE...
+-- Program output ends --
+
++++ Program timed off +++
+[+] Hash of coverage map: d7011a977b7c2e7a
+[+] Captured 1658 tuples (map size 65536, highest value 246, total values 9079) in 'm.bin'.
+```
+
+This instrumentation allows us to do a side-by-side comparison of both baseband implementations, as we use the same allowlists and pre-requisites.
+
 # 5GBaseChecker
 
 This is the public release of the code of 5GBaseChecker, a security analysis framework for the control plane protocols of 5G baseband.  
