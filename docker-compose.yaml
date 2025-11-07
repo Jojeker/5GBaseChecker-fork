@@ -1,6 +1,6 @@
 services:
   fgbc-eval:
-    image: 5gbc:latest
+    image: fgbc-eval:latest
     cpuset: ${CORES:-0,1}
     privileged: true
     devices:

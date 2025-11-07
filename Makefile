@@ -20,7 +20,16 @@ eval-srs:
 	done
 
 build:
-	- docker build -t $(IMAGE) .
+	docker build -t $(IMAGE) .
+
+build-analyze:
+	docker build -f Dockerfile.analyze -t covplot .
+
+analyze:
+	docker run --rm \
+	    -v "$$(pwd)/COV_OUT:/COV_OUT:ro" \
+	    -v "$$(pwd)/COV_RESULTS:/COV_RESULTS" \
+	    covplot
 
 dev-enter:
 	- docker run -it --rm \

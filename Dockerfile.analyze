@@ -1,0 +1,17 @@
+FROM python:3.10-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        python3-tk \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir matplotlib
+
+COPY afl_cov.py /usr/local/bin/afl_cov_graph.py
+RUN chmod +x /usr/local/bin/afl_cov_graph.py
+
+# entrypoint loops over all dirs under ./COV_IN
+COPY run_all.sh /usr/local/bin/run_all.sh
+RUN chmod +x /usr/local/bin/run_all.sh
+
+ENTRYPOINT ["/usr/local/bin/run_all.sh"]
+
