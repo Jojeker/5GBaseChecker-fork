@@ -1,6 +1,6 @@
 CURRENT_DATE := $(shell date +%Y-%m-%d_%H-%M)
 BASE_DIR := $(shell realpath COV_OUT)/$(CURRENT_DATE)
-DURATION := 24
+DURATION ?= 24
 CPUSTART := 5
 NRUNS := 1
 IMAGE := fgbc-eval

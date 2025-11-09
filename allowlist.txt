@@ -6,36 +6,10 @@ lib/src/common/bearer_manager.cc
 lib/src/common/crash_handler.cc
 
 lib/src/asn1/nas_5g_utils.cc
-lib/src/asn1/asn1_utils.cc
-lib/src/asn1/rrc_nr_utils.cc
 lib/src/asn1/nas_5g_msg.cc
 lib/src/asn1/nas_5g_ies.cc
-lib/src/asn1/liblte_common.cc
-lib/src/asn1/rrc/security.cc
-lib/src/asn1/rrc.cc
-lib/src/asn1/rrc_utils.cc
-lib/src/asn1/liblte_common.cc
 lib/src/asn1/rrc_nr.cc
-lib/src/asn1/rrc/ho_cmd.cc
-lib/src/asn1/rrc/ul_ccch_msg.cc
-lib/src/asn1/rrc/common_ext.cc
-lib/src/asn1/rrc/meascfg.cc
-lib/src/asn1/rrc/phy_ded.cc
-lib/src/asn1/rrc/si.cc
-lib/src/asn1/rrc/common.cc
-lib/src/asn1/rrc/ul_dcch_msg.cc
-lib/src/asn1/rrc/uecap.cc
-lib/src/asn1/rrc/rr_common.cc
-lib/src/asn1/rrc/dl_dcch_msg.cc
-lib/src/asn1/rrc/rr_ded.cc
-lib/src/asn1/rrc/paging.cc
-lib/src/asn1/rrc/dl_ccch_msg.cc
-lib/src/asn1/rrc/bcch_msg.cc
 lib/src/asn1/rrc/security.cc
-lib/src/asn1/e2sm_kpm.cpp
-lib/src/asn1/rrc_nr_utils.cc
-lib/src/asn1/gtpc.cc
-lib/src/asn1/asn1_utils.cc
 
 srsue/src/main.cc
 srsue/src/ue.cc
@@ -54,14 +28,7 @@ srsue/src/stack/upper/pcsc_usim.cc
 srsue/src/stack/upper/nas_idle_procedures.cc
 srsue/src/stack/upper/nas_base.cc
 srsue/src/stack/ue_stack_lte.cc
-srsue/src/stack/rrc_nr/rrc_nr_procedures.cc
 srsue/src/stack/rrc_nr/rrc_nr.cc
 
 srsue/src/stack/ue_stack_nr.cc
-srsue/src/stack/mac_common/mac_common.cc
-srsue/src/stack/rrc/phy_controller.cc
-srsue/src/stack/rrc/rrc_procedures.cc
-srsue/src/stack/rrc/rrc_rlf_report.cc
-srsue/src/stack/rrc/rrc_cell.cc
-srsue/src/stack/rrc/rrc_meas.cc
 srsue/src/stack/rrc/rrc.cc
