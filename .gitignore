@@ -107,3 +107,4 @@ fabric.properties
 
 # Coverage file from eval
 COV_OUT
+COV_RESULTS
