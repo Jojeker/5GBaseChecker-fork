@@ -1,15 +1,8 @@
-lib/src/common/rrc_common.cc
-lib/src/common/security.cc
-lib/src/common/zuc.cc
-lib/src/common/liblte_security.cc
-lib/src/common/bearer_manager.cc
 lib/src/common/crash_handler.cc
 
 lib/src/asn1/nas_5g_utils.cc
 lib/src/asn1/nas_5g_msg.cc
 lib/src/asn1/nas_5g_ies.cc
-lib/src/asn1/rrc_nr.cc
-lib/src/asn1/rrc/security.cc
 
 srsue/src/main.cc
 srsue/src/ue.cc
@@ -21,14 +14,9 @@ srsue/src/stack/upper/nas_emm_state.cc
 srsue/src/stack/upper/usim.cc
 
 srsue/src/stack/upper/nas_5g_procedures.cc
-srsue/src/stack/upper/gw.cc
-srsue/src/stack/upper/tft_packet_filter.cc
 srsue/src/stack/upper/nas_5gmm_state.cc
 srsue/src/stack/upper/pcsc_usim.cc
 srsue/src/stack/upper/nas_idle_procedures.cc
 srsue/src/stack/upper/nas_base.cc
 srsue/src/stack/ue_stack_lte.cc
 srsue/src/stack/rrc_nr/rrc_nr.cc
-
-srsue/src/stack/ue_stack_nr.cc
-srsue/src/stack/rrc/rrc.cc
