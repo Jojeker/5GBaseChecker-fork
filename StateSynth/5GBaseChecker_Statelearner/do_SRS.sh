@@ -4,6 +4,7 @@ pkill -9 mongo
 mongod --fork --logpath /var/log/mongodb.log --dbpath /data/db --bind_ip_all
 /OPEN5GS/misc/db/open5gs-dbctl add 001011234567895 00000000000000000000000064617665 64097b52589f63f12eec5172b49929d9
 
+DURATION=$1
 
 mkdir -p /data/coverage
 
@@ -19,7 +20,7 @@ LEARNER_PID=$!
 
 # Set a 24-hour timer (24h * 60m * 60s = 86400 seconds)
 (
-    sleep 86400
+    sleep $(($DURATION * 60 * 60))
     echo "24 hours passed, stopping all processes"
     kill -9 $LEARNER_PID
     pkill -9 java # For good measure

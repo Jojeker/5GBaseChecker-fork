@@ -1,7 +1,7 @@
 CURRENT_DATE := $(shell date +%Y-%m-%d_%H-%M)
 BASE_DIR := $(shell realpath COV_OUT)/$(CURRENT_DATE)
 DURATION ?= 24
-CPUSTART := 5
+CPUSTART ?= 16
 NRUNS := 1
 IMAGE := fgbc-eval
 
@@ -16,7 +16,7 @@ eval-srs:
 		--name=$(IMAGE)-$$i \
 		-e INSTANCE=$$i \
 		--rm \
-		$(IMAGE) sh -c "/app/do_SRS.sh > /data/coverage/log.txt 2>&1"; \
+		$(IMAGE) sh -c "/app/do_SRS.sh $(DURATION) > /data/coverage/log.txt 2>&1"; \
 	done
 
 build:
