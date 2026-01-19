@@ -30,4 +30,7 @@ for d in "$IN"/*; do
 		--png "$outrun/coverage.png" \
 		--csv "$outrun/coverage.csv"
     done
+    python3 /usr/local/bin/afl_cumulate.py \
+	    --root "${outf}" \
+	    --outdir "${outf}/cumulation"
 done

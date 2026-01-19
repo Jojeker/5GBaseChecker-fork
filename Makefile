@@ -1,8 +1,8 @@
 CURRENT_DATE := $(shell date +%Y-%m-%d_%H-%M)
 BASE_DIR := $(shell realpath COV_OUT)/$(CURRENT_DATE)
 DURATION ?= 24
-CPUSTART ?= 16
-NRUNS := 1
+CPUSTART ?= 0
+NRUNS ?= 1
 IMAGE := fgbc-eval
 
 # Script runs for 24 hours (hardcoded)
